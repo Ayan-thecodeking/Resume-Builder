@@ -2,31 +2,53 @@ import React from 'react';
 import Top from '../components/Layout/Top';
 import Left from '../components/Layout/Left';
 import Right from '../components/Layout/Right';
-// import OneColumn from '../components/Column/OneColumn';
-// import TwoColumn from '../components/Column/TwoColumn';
 import Experience from '../components/RearrangeSection/Experiance';
 import Skills from '../components/RearrangeSection/Skills';
 import Education from '../components/RearrangeSection/Education';
 import Specialties from '../components/RearrangeSection/Specialties';
-import Heading from '../components/Heading';
 import ResumeCard from '../components/ResumeCard';
-import ResumeList from '../components/ResumeList';
+// import ResumeList from '../components/ResumeList';
+
+import { FaPlus, FaTrash } from 'react-icons/fa';
+
 const Dashboard = ({
   resumes,
   activeResume,
   updateResumeData,
   addNewResume,
+  deleteResume,
   setActiveResumeId,
 }) => {
   return (
     <div className="dashboard">
       <Top />
-      <ResumeList
-        resumes={resumes}
-        activeResumeId={activeResume.id}
-        setActiveResumeId={setActiveResumeId}
-        addNewResume={addNewResume}
-      />
+      <div className="resume-grid">
+        {resumes.map((resume) => (
+          <div
+            key={resume.id}
+            className={`resume-card-container ${
+              resume.id === activeResume.id ? 'active' : ''
+            }`}
+            onClick={() => setActiveResumeId(resume.id)}
+          >
+            <ResumeCard resumeData={resume} updateResumeData={updateResumeData} />
+            {resumes.length > 1 && (
+              <button
+                className="delete-resume-btn"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent card click event
+                  deleteResume(resume.id);
+                }}
+              >
+                <FaTrash />
+              </button>
+            )}
+          </div>
+        ))}
+        <div className="add-resume-btn" onClick={addNewResume}>
+          <FaPlus />
+        </div>
+      </div>
       <div className="main-content">
         <Left>
           <Experience
@@ -42,12 +64,6 @@ const Dashboard = ({
             }
           />
         </Left>
-        <ResumeCard
-          resumeData={activeResume}
-          updateResumeData={(section, data) =>
-            updateResumeData(activeResume.id, section, data)
-          }
-        />
         <Right>
           <Education
             education={activeResume.education}
@@ -63,7 +79,6 @@ const Dashboard = ({
           />
         </Right>
       </div>
-      {/* <Heading name={activeResume.name} title={activeResume.title} /> */}
     </div>
   );
 };

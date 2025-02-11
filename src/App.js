@@ -6,8 +6,8 @@ function App() {
   const [resumes, setResumes] = useState([
     {
       id: '1',
-      name: 'Ayan Gupta',
-      title: 'Frontend Developer',
+      name: 'Brandon Kenn',
+      title: 'UUI/X Designer',
       experience: [],
       skills: [],
       education: [],
@@ -38,6 +38,14 @@ function App() {
     setActiveResumeId(newResume.id);
   };
 
+  const deleteResume = (id) => {
+    if (resumes.length > 1) {
+      const updatedResumes = resumes.filter((resume) => resume.id !== id);
+      setResumes(updatedResumes);
+      setActiveResumeId(updatedResumes[0].id); // Set the first resume as active
+    }
+  };
+
   const activeResume = resumes.find((resume) => resume.id === activeResumeId);
 
   return (
@@ -47,6 +55,7 @@ function App() {
         activeResume={activeResume}
         updateResumeData={updateResumeData}
         addNewResume={addNewResume}
+        deleteResume={deleteResume}
         setActiveResumeId={setActiveResumeId}
       />
     </div>
